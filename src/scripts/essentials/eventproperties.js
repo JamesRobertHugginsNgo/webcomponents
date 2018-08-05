@@ -8,8 +8,8 @@ const eventProperties = {
 		value: function(eventName, eventHandler) {
 			if (eventName) {
 				if (typeof eventName === 'string') {
-					eventName.split(/\s+/).forEach((eventName) => {
-						if (this.eventHandlers && this.eventHandlers[eventName]) {
+					eventName.split(' ').forEach((eventName) => {
+						if (eventName && this.eventHandlers && this.eventHandlers[eventName]) {
 							if (eventHandler) {
 								const index = this.eventHandlers[eventName].indexOf(eventHandler);
 								if (index !== -1) {
