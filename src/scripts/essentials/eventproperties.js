@@ -29,6 +29,8 @@ const eventProperties = {
 					});
 				}
 			}
+
+			return this;
 		}
 	},
 
@@ -53,6 +55,8 @@ const eventProperties = {
 					});
 				}
 			}
+
+			return this;
 		}
 	},
 
@@ -73,6 +77,8 @@ const eventProperties = {
 					});
 				}
 			}
+
+			return this;
 		}
 	}
 };
