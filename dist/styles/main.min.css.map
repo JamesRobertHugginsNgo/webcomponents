@@ -1,0 +1,1 @@
+{"version":3,"sources":["main.min.css"],"names":[],"mappings":"AAAA,MACE,SAAe,CAAE,AACjB,iBACE,UAAe,CAAE","file":"main.min.css","sourcesContent":[".test {\n  color: #ff0000; }\n  .test .innerTest {\n    color: #000000; }\n"]}
