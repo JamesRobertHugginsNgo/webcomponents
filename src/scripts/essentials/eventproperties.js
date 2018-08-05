@@ -36,8 +36,8 @@ const eventProperties = {
 		value: function(eventName, eventHandler) {
 			if (eventName) {
 				if (typeof eventName === 'string') {
-					eventName.split(/\s+/).forEach((eventName) => {
-						if (eventHandler) {
+					eventName.split(' ').forEach((eventName) => {
+						if (eventName && eventHandler) {
 							if (!this.eventHandlers) {
 								this.eventHandlers = {};
 							}
@@ -60,8 +60,8 @@ const eventProperties = {
 		value: function(eventName, ...args) {
 			if (eventName) {
 				if (typeof eventName === 'string') {
-					eventName.split(/\s+/).forEach((eventName) => {
-						if (this.eventHandlers && this.eventHandlers[eventName]) {
+					eventName.split(' ').forEach((eventName) => {
+						if (eventName && this.eventHandlers && this.eventHandlers[eventName]) {
 							this.eventHandlers[eventName].forEach((eventHandler) => {
 								eventHandler.call(this, ...args);
 							});
