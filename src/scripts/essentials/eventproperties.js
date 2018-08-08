@@ -11,13 +11,19 @@ const eventProperties = {
 					eventName.split(' ').forEach((eventName) => {
 						if (eventName && this.eventHandlers && this.eventHandlers[eventName]) {
 							if (eventHandler) {
-								const index = this.eventHandlers[eventName].indexOf(eventHandler);
-								if (index !== -1) {
-									this.eventHandlers[eventName].splice(index, 1);
+								if (!Array.isArray(eventHandler)) {
+									eventHandler = [eventHandler];
 								}
-								if (this.eventHandlers[eventName].length === 0) {
-									delete this.eventHandlers[eventName];
-								}
+
+								eventHandler.forEach((eventHandler) => {
+									const index = this.eventHandlers[eventName].indexOf(eventHandler);
+									if (index !== -1) {
+										this.eventHandlers[eventName].splice(index, 1);
+									}
+									if (this.eventHandlers[eventName].length === 0) {
+										delete this.eventHandlers[eventName];
+									}
+								});
 							} else {
 								delete this.eventHandlers[eventName];
 							}
@@ -38,13 +44,18 @@ const eventProperties = {
 				if (typeof eventName === 'string') {
 					eventName.split(' ').forEach((eventName) => {
 						if (eventName && eventHandler) {
-							if (!this.eventHandlers) {
-								this.eventHandlers = {};
+							if (!Array.isArray(eventHandler)) {
+								eventHandler = [eventHandler];
 							}
-							if (!this.eventHandlers[eventName]) {
-								this.eventHandlers[eventName] = [];
-							}
-							this.eventHandlers[eventName].push(eventHandler);
+							eventHandler.forEach((eventHandler) => {
+								if (!this.eventHandlers) {
+									this.eventHandlers = {};
+								}
+								if (!this.eventHandlers[eventName]) {
+									this.eventHandlers[eventName] = [];
+								}
+								this.eventHandlers[eventName].push(eventHandler);
+							});
 						}
 					});
 				} else if (Array.isArray(eventName)) {
