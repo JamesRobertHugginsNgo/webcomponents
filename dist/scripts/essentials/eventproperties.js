@@ -41,6 +41,8 @@ var eventProperties = {
 					});
 				}
 			}
+
+			return this;
 		}
 	},
 
@@ -72,6 +74,8 @@ var eventProperties = {
 					});
 				}
 			}
+
+			return this;
 		}
 	},
 
@@ -98,6 +102,8 @@ var eventProperties = {
 					});
 				}
 			}
+
+			return this;
 		}
 	}
 };
