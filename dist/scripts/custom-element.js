@@ -1,23 +1,26 @@
-'use strict';
-
-(function () {
+(() => {
 	// GLOBAL STYLES
-	var style = document.createElement('style');
+	const style = document.createElement('style');
 	style.appendChild(document.createTextNode('')); // WebKit hack :(
 	document.head.appendChild(style);
-	style.sheet.insertRule('\n\t\tCUSTOM-ELEMENT {\n\t\t\tcolor: red;\n\t\t\tdisplay: block;\n\t\t}\n\t');
+	style.sheet.insertRule(`
+		CUSTOM-ELEMENT {
+			color: red;
+			display: block;
+		}
+	`);
 
 	// SHARED RESOURCES
-	var counter = 0;
+	let counter = 0;
 
 	function clickHandler(event) {
-		var newElement = document.createElement('CUSTOM-ELEMENT');
+		const newElement = document.createElement('CUSTOM-ELEMENT');
 		newElement.appendChild(document.createTextNode('CUSTOM-ELEMENT-' + counter));
 		counter = counter + 1;
 
-		var currentNode = event.target;
-		var parentNode = currentNode.parentNode;
-		var siblingNode = currentNode.nextSibling;
+		const currentNode = event.target;
+		const parentNode = currentNode.parentNode;
+		const siblingNode = currentNode.nextSibling;
 
 		if (siblingNode) {
 			parentNode.insertBefore(newElement, siblingNode);
@@ -44,7 +47,7 @@
 	window.on('elementadded:CUSTOM-ELEMENT', appended);
 
 	// INITIALIZE EXISTING ELEMENTS
-	document.querySelectorAll('CUSTOM-ELEMENT').forEach(function (element) {
+	document.querySelectorAll('CUSTOM-ELEMENT').forEach((element) => {
 		appended(element);
 	});
 })();

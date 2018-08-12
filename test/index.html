@@ -12,6 +12,11 @@
 	<body>
 		<div class="container">
 			<h1>Test Page</h1>
+
+			<dl>
+				<dt>Custom Element</dt>
+				<dd><custom-element>Custom Element</custom-element></dd>
+			</dl>
 		</div>
 
 		<script src="../node_modules/babel-polyfill/dist/polyfill.min.js"></script>
@@ -20,7 +25,9 @@
 		<script src="../node_modules/underscore/underscore-min.js"></script>
 		<script src="../node_modules/backbone/backbone-min.js"></script>
 
-		<script src="../dist/scripts/lib.js"></script>
-		<script src="../dist/scripts/main.js"></script>
+		<script src="../dist/scripts/commons/eventproperties.js"></script>
+		<script src="../dist/scripts/commons/mutationobserver.js"></script>
+
+		<script src="../dist/scripts/custom-element.js"></script>
 	</body>
 </html>
