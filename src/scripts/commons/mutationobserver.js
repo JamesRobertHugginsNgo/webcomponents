@@ -118,7 +118,6 @@ const mutationObserver = new MutationObserver((mutationsList) => {
 			} else if (mutationRecord.type === 'attributes') {
 				window.trigger([
 					'nodeattributechange',
-					`nodeattributechange:*:${mutationRecord.attributeName}`,
 					`nodeattributechange:${targetNode.nodeName.toUpperCase()}`,
 					`nodeattributechange:${targetNode.nodeName.toUpperCase()}:${mutationRecord.attributeName}`
 				].join(' '), targetNode, mutationRecord.attributeName);
@@ -126,10 +125,19 @@ const mutationObserver = new MutationObserver((mutationsList) => {
 				if (targetNode.nodeType === Node.ELEMENT_NODE) {
 					window.trigger([
 						'elementattributechange',
-						`elementattributechange:*:${mutationRecord.attributeName}`,
 						`elementattributechange:${targetNode.nodeName.toUpperCase()}`,
 						`elementattributechange:${targetNode.nodeName.toUpperCase()}:${mutationRecord.attributeName}`
 					].join(' '), targetNode, mutationRecord.attributeName);
+
+					const attributeIs = targetNode.getAttribute('is');
+					if (attributeIs != null && attributeIs != '') {
+						window.trigger([[[
+							`nodeattributechange:${attributeIs.toUpperCase()}`,
+							`nodeattributechange:${attributeIs.toUpperCase()}:${mutationRecord.attributeName}`,
+							`elementattributechange:${attributeIs.toUpperCase()}`,
+							`elementattributechange:${attributeIs.toUpperCase()}:${mutationRecord.attributeName}`
+						].join(' '), targetNode, mutationRecord.attributeName]]);
+					}
 				}
 			}
 		});
