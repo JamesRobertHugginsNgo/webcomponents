@@ -10,8 +10,16 @@
 	let counter = 0;
 
 	function clickHandler(event) {
-		const newElement = document.createElement(component);
-		newElement.appendChild(document.createTextNode(`${component}-${counter}`));
+		const newElement = document.createElement(this.nodeName);
+
+		const attributeIs = this.getAttribute('is');
+		if (attributeIs) {
+			newElement.setAttribute('is', attributeIs);
+		}
+
+		setup(newElement);
+
+		newElement.appendChild(document.createTextNode(`${component.toUpperCase()}-${counter}`));
 		counter = counter + 1;
 
 		const currentNode = event.target;
@@ -25,6 +33,15 @@
 		}
 	}
 
+	function setup(element) {
+		if (!element.hasOwnProperty('component')) {
+			Object.defineProperties(element, Object.assign({}, elementProperties, eventProperties));
+			element.createCallback();
+		}
+
+		return element;
+	}
+
 	/////////////////////////////////////////////////////////////////////////////
 	// ELEMENT PROPERTIES
 	/////////////////////////////////////////////////////////////////////////////
@@ -32,26 +49,26 @@
 	const elementProperties = {
 		appendedCallback: {
 			value: function() {
-				console.log(`${component} APPENDED`);
+				console.log(`${component.toUpperCase()} APPENDED`);
 			}
 		},
 
 		attributeChangeCallback: {
 			value: function(attributeName) {
-				console.log(`${component} ATTRIBUTE CHANGED`, attributeName);
+				console.log(`${component.toUpperCase()} ATTRIBUTE CHANGED`, attributeName);
 			}
 		},
 
 		createCallback: {
 			value: function() {
-				console.log(`${component} CREATED`);
+				console.log(`${component.toUpperCase()} CREATED`);
 
 				this.addEventListener('click', clickHandler);
 			}
 		},
 
 		component: {
-			value: component
+			value: component.toUpperCase()
 		},
 
 		removedCallback: {
@@ -70,7 +87,8 @@
 
 	const sheet = style.sheet;
 	sheet.insertRule(`
-		${component} {
+		${component},
+		[is="${component.toUpperCase()}" i] {
 			color: red;
 			display: block;
 		}
@@ -80,21 +98,16 @@
 	// GLOBAL EVENT HANDLER
 	/////////////////////////////////////////////////////////////////////////////
 
-	function setup(element) {
-		if (!element.hasOwnProperty('component')) {
-			Object.defineProperties(element, Object.assign({}, elementProperties, eventProperties));
-			element.createCallback();
-		}
+	window.on(`elementcreated:${component.toUpperCase()}`, (element) => setup(element));
+	window.on(`elementadded:${component.toUpperCase()}`, (element) => setup(element).appendedCallback());
+	window.on(`elementattributechange:${component.toUpperCase()}`, (element, attributeName) => setup(element).attributeChangeCallback(attributeName));
+	window.on(`elementremoved:${component.toUpperCase()}`, (element) => setup(element).removedCallback());
 
-		return element;
-	}
-
-	window.on(`elementcreated:${component}`, (element) => setup(element));
-	window.on(`elementadded:${component}`, (element) => setup(element).appendedCallback());
-	window.on(`elementattributechange:${component}`, (element, attributeName) => setup(element).attributeChangeCallback(attributeName));
-	window.on(`elementremoved:${component}`, (element) => setup(element).removedCallback());
-
-	document.querySelectorAll(component).forEach((element) => {
+	document.querySelectorAll([
+		`${component.toUpperCase()}`,
+		`[is="${component.toUpperCase()}" i]`,
+		`[is="${component.toUpperCase()}"]`
+	].join(',')).forEach((element) => {
 		setup(element);
 	});
 })();
