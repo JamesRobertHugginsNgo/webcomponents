@@ -99,6 +99,10 @@ document.createElement = ((createElement) => {
 			'elementcreated',
 			`elementcreated:${element.nodeName.toUpperCase()}`
 		].join(' '), element);
+		const isAttribute = element.getAttribute('is');
+		if (isAttribute != null && isAttribute != '') {
+			window.trigger(`elementcreated:${isAttribute}`, element);
+		}
 		return element;
 	}
 })(document.createElement);
