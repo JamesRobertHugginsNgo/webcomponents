@@ -1,0 +1,17 @@
+
+.wrapper {
+	background-color: LightGrey;
+	border-radius: 0.5rem;
+	cursor: pointer;
+	margin: 1rem 0;
+	padding: 1rem;
+}
+
+.wrapper:hover {
+	background-color: Grey;
+	color: White;
+}
+
+.wrapper header {
+	font-weight: bold;
+}

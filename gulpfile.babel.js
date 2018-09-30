@@ -1,5 +1,5 @@
 import autoPrefixer from 'gulp-autoprefixer';
-// import babel from 'gulp-babel';
+import babel from 'gulp-babel';
 import cssNano from 'gulp-cssnano';
 import debug from 'gulp-debug';
 import del from 'del';
@@ -11,7 +11,7 @@ import mustache from 'gulp-mustache';
 import rename from 'gulp-rename';
 import sass from 'gulp-sass';
 import sourceMaps from 'gulp-sourcemaps';
-// import uglify from 'gulp-uglify';
+import uglify from 'gulp-uglify';
 import webDependencies from 'gulp-web-dependencies';
 import webServer from 'gulp-webserver';
 
@@ -78,13 +78,13 @@ export function buildJs() {
 		.pipe(mustache())
 		.pipe(esLint())
 		.pipe(esLint.format())
-		// .pipe(babel())
+		.pipe(babel())
 		.pipe(gulp.dest(buildJsDest))
-		// .pipe(rename((path) => path.basename += '.min'))
-		// .pipe(sourceMaps.init())
-		// .pipe(uglify())
-		// .pipe(sourceMaps.write('.'))
-		// .pipe(gulp.dest(buildJsDest));
+		.pipe(rename((path) => path.basename += '.min'))
+		.pipe(sourceMaps.init())
+		.pipe(uglify())
+		.pipe(sourceMaps.write('.'))
+		.pipe(gulp.dest(buildJsDest));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -93,7 +93,7 @@ export function buildJs() {
 
 export const build = gulp.series(clean, gulp.parallel(buildJs, buildCss, buildHtml));
 
-export function watch() {
+function _serve() {
 	const servePath = '.';
 	gulp.src(servePath)
 		.pipe(webServer({
@@ -103,6 +103,10 @@ export function watch() {
 			port: 8080
 		}));
 
+	_watch();
+}
+
+function _watch() {
 	const htmlTemplate = './src/**/*.template.html';
 	gulp.watch((Array.isArray(buildHtmlSrc) ? buildHtmlSrc : [buildHtmlSrc]).concat(
 		Array.isArray(htmlTemplate) ? htmlTemplate : [htmlTemplate]
@@ -121,10 +125,12 @@ export function watch() {
 
 	const jsTemplate = './src/**/*.template.js';
 	gulp.watch((Array.isArray(buildJsSrc) ? buildJsSrc : [buildJsSrc]).concat(
-		Array.isArray(jsTemplate) ? jsTemplate : [jsTemplate]
+		Array.isArray(jsTemplate) ? jsTemplate : [jsTemplate],
+		Array.isArray(htmlTemplate) ? htmlTemplate : [htmlTemplate]
 	), buildJs);
 }
 
-export const serve = gulp.series(build, watch);
+export const serve = gulp.series(build, _serve);
+export const watch = gulp.series(build, _watch);
 
 export default build;
